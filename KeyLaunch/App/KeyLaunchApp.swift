@@ -37,7 +37,7 @@ struct KeyLaunchApp: App {
     @Environment(\.openWindow) private var openWindow
 
     var body: some Scene {
-        MenuBarExtra("KeyLaunch", systemImage: "keyboard.badge.ellipsis") {
+        MenuBarExtra("KeyLaunch", image: "MenuBarIcon") {
             Toggle("开机启动", isOn: Binding(
                 get: { appModel.isLaunchAtLoginEnabled },
                 set: { appModel.setLaunchAtLoginEnabled($0) }
