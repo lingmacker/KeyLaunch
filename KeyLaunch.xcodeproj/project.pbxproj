@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07F393975FD417D5F070EC72 /* LaunchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52B0CA0D1FB0CF8BB5635E2 /* LaunchConfig.swift */; };
 		2040DF334FAA02C6EA8F5F6F /* LaunchConfigSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB87C93DE71950110B774012 /* LaunchConfigSanitizer.swift */; };
+			6BA37A0167AEB514F1E19D2B /* AppLifecyclePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA37A020B5C2A598745B30E /* AppLifecyclePolicy.swift */; };
 		8F19C20CD436B18D2D771F6A /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 85E231043673A107BE133E35 /* KeyboardShortcuts */; };
 		9A0000000000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A0000000000000000000002 /* Assets.xcassets */; };
 		A0532E4F613CEAE23523F956 /* AppDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786205E11DA0802DA7836B9 /* AppDiscovery.swift */; };
@@ -22,6 +23,7 @@
 		7BF7275FDFB33F38897F77D2 /* KeyLaunch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeyLaunch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A0000000000000000000002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A52B0CA0D1FB0CF8BB5635E2 /* LaunchConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchConfig.swift; sourceTree = "<group>"; };
+			6BA37A020B5C2A598745B30E /* AppLifecyclePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLifecyclePolicy.swift; sourceTree = "<group>"; };
 		BB87C93DE71950110B774012 /* LaunchConfigSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchConfigSanitizer.swift; sourceTree = "<group>"; };
 		FDA95DE3FDC44381BC4ABAF1 /* ConfigStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -42,6 +44,7 @@
 			isa = PBXGroup;
 			children = (
 				5786205E11DA0802DA7836B9 /* AppDiscovery.swift */,
+				6BA37A020B5C2A598745B30E /* AppLifecyclePolicy.swift */,
 				FDA95DE3FDC44381BC4ABAF1 /* ConfigStore.swift */,
 				A52B0CA0D1FB0CF8BB5635E2 /* LaunchConfig.swift */,
 				BB87C93DE71950110B774012 /* LaunchConfigSanitizer.swift */,
@@ -151,6 +154,7 @@
 				E83AC3CE6C038BFE77EDD88C /* ConfigStore.swift in Sources */,
 				07F393975FD417D5F070EC72 /* LaunchConfig.swift in Sources */,
 				2040DF334FAA02C6EA8F5F6F /* LaunchConfigSanitizer.swift in Sources */,
+				6BA37A0167AEB514F1E19D2B /* AppLifecyclePolicy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

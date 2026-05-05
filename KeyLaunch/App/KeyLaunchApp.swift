@@ -3,6 +3,10 @@ import KeyboardShortcuts
 import ServiceManagement
 import SwiftUI
 
+#if SWIFT_PACKAGE
+import KeyLaunchCore
+#endif
+
 extension KeyboardShortcuts.Name {
     static let row1 = Self("launch-row-1")
     static let row2 = Self("launch-row-2")
@@ -20,8 +24,15 @@ private let shortcutNames: [KeyboardShortcuts.Name] = [
     .row1, .row2, .row3, .row4, .row5, .row6, .row7, .row8, .row9, .row10
 ]
 
+final class KeyLaunchAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
+        AppLifecyclePolicy.shouldTerminateAfterLastWindowClosed
+    }
+}
+
 @main
 struct KeyLaunchApp: App {
+    @NSApplicationDelegateAdaptor(KeyLaunchAppDelegate.self) private var appDelegate
     @State private var appModel = KeyLaunchModel()
     @Environment(\.openWindow) private var openWindow
 
