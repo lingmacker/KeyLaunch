@@ -16,6 +16,10 @@
 		A0532E4F613CEAE23523F956 /* AppDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786205E11DA0802DA7836B9 /* AppDiscovery.swift */; };
 		E83AC3CE6C038BFE77EDD88C /* ConfigStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA95DE3FDC44381BC4ABAF1 /* ConfigStore.swift */; };
 		FAB28EFEB3D724BD7A519055 /* KeyLaunchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0183704DC9EF458E64AAD64D /* KeyLaunchApp.swift */; };
+			4D7AF15F1E8B4E239AF90691 /* KeyLaunchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A2E8C0A15E44D3B9CFF101 /* KeyLaunchModel.swift */; };
+			91C8E97A06D44568ADFA5B11 /* SettingsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D6B0F8E24F4CA5A4D88201 /* SettingsLayout.swift */; };
+			F67DCCAF2B7143C79B7F3310 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B619D22B5D4AC7A8F77301 /* SettingsView.swift */; };
+			2AB9D55A9E64435D8B45AA22 /* ShortcutRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C466A4D6C9C14A8E8B824B01 /* ShortcutRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +32,10 @@
 			4A399D727C6FF4516D49F26E /* AppLaunchCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchCompletion.swift; sourceTree = "<group>"; };
 		BB87C93DE71950110B774012 /* LaunchConfigSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchConfigSanitizer.swift; sourceTree = "<group>"; };
 		FDA95DE3FDC44381BC4ABAF1 /* ConfigStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigStore.swift; sourceTree = "<group>"; };
+			B1A2E8C0A15E44D3B9CFF101 /* KeyLaunchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyLaunchModel.swift; sourceTree = "<group>"; };
+			D3D6B0F8E24F4CA5A4D88201 /* SettingsLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLayout.swift; sourceTree = "<group>"; };
+			E5B619D22B5D4AC7A8F77301 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+			C466A4D6C9C14A8E8B824B01 /* ShortcutRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +78,10 @@
 			isa = PBXGroup;
 			children = (
 				0183704DC9EF458E64AAD64D /* KeyLaunchApp.swift */,
+				B1A2E8C0A15E44D3B9CFF101 /* KeyLaunchModel.swift */,
+				D3D6B0F8E24F4CA5A4D88201 /* SettingsLayout.swift */,
+				E5B619D22B5D4AC7A8F77301 /* SettingsView.swift */,
+				C466A4D6C9C14A8E8B824B01 /* ShortcutRowView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -159,6 +171,10 @@
 				2040DF334FAA02C6EA8F5F6F /* LaunchConfigSanitizer.swift in Sources */,
 				6BA37A0167AEB514F1E19D2B /* AppLifecyclePolicy.swift in Sources */,
 				17C5D08CCAF76A686A2E7A76 /* AppLaunchCompletion.swift in Sources */,
+				4D7AF15F1E8B4E239AF90691 /* KeyLaunchModel.swift in Sources */,
+				91C8E97A06D44568ADFA5B11 /* SettingsLayout.swift in Sources */,
+				F67DCCAF2B7143C79B7F3310 /* SettingsView.swift in Sources */,
+				2AB9D55A9E64435D8B45AA22 /* ShortcutRowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
