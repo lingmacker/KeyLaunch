@@ -8,10 +8,6 @@ let package = Package(
         .macOS(.v14)
     ],
     products: [
-        .library(
-            name: "KeyLaunchCore",
-            targets: ["KeyLaunchCore"]
-        ),
         .executable(
             name: "KeyLaunch",
             targets: ["KeyLaunchApp"]
@@ -21,21 +17,20 @@ let package = Package(
         .package(url: "https://github.com/sindresorhus/KeyboardShortcuts", from: "2.3.0")
     ],
     targets: [
-        .target(
-            name: "KeyLaunchCore",
-            path: "KeyLaunch/Core"
-        ),
         .executableTarget(
             name: "KeyLaunchApp",
             dependencies: [
-                "KeyLaunchCore",
                 .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts")
             ],
-            path: "KeyLaunch/App"
+            path: "KeyLaunch",
+            sources: ["App", "Core"],
+            resources: [
+                .process("Assets.xcassets")
+            ]
         ),
         .testTarget(
             name: "KeyLaunchCoreTests",
-            dependencies: ["KeyLaunchCore"]
+            dependencies: ["KeyLaunchApp"]
         )
     ],
     swiftLanguageModes: [.v6]

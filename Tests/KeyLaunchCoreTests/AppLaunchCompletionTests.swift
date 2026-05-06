@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import KeyLaunchCore
+@testable import KeyLaunchApp
 
 @Test("Launch completion defers state update to main actor")
 func launchCompletionDefersStateUpdateToMainActor() {

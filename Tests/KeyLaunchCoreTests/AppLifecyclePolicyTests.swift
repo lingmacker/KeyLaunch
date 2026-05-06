@@ -1,5 +1,5 @@
 import Testing
-@testable import KeyLaunchCore
+@testable import KeyLaunchApp
 
 @Test("Menu bar app stays alive when windows close")
 func menuBarAppStaysAliveWhenWindowsClose() {

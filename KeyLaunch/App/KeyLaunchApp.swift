@@ -3,9 +3,6 @@ import KeyboardShortcuts
 import ServiceManagement
 import SwiftUI
 
-#if SWIFT_PACKAGE
-import KeyLaunchCore
-#endif
 
 extension KeyboardShortcuts.Name {
     static let row1 = Self("launch-row-1")

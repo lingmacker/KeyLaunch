@@ -1,5 +1,5 @@
 import Testing
-@testable import KeyLaunchCore
+@testable import KeyLaunchApp
 
 @Test("Adding a row returns a new config and keeps the original unchanged")
 func addRowIsImmutable() throws {

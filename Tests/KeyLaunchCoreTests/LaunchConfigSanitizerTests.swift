@@ -1,5 +1,5 @@
 import Testing
-@testable import KeyLaunchCore
+@testable import KeyLaunchApp
 
 @Test("Sanitizer keeps trusted apps and replaces persisted app metadata")
 func sanitizerKeepsTrustedApps() throws {
