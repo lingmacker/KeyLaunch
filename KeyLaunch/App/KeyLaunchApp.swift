@@ -24,6 +24,14 @@ private let shortcutNames: [KeyboardShortcuts.Name] = [
     .row1, .row2, .row3, .row4, .row5, .row6, .row7, .row8, .row9, .row10
 ]
 
+private enum SettingsLayout {
+    static let shortcutColumnWidth: CGFloat = 168
+    static let shortcutRecorderWidth: CGFloat = 132
+    static let actionColumnWidth: CGFloat = 48
+    static let rowHorizontalSpacing: CGFloat = 18
+    static let cardCornerRadius: CGFloat = 16
+}
+
 final class KeyLaunchAppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
         AppLifecyclePolicy.shouldTerminateAfterLastWindowClosed
@@ -207,77 +215,103 @@ struct SettingsView: View {
     var body: some View {
         VStack(spacing: 0) {
             header
-            Divider()
             content
+                .padding(12)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color(nsColor: .windowBackgroundColor))
     }
 
     private var header: some View {
-        HStack {
-            Text("KeyLaunch 配置")
-                .font(.title3.weight(.semibold))
+        HStack(alignment: .center, spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("快捷启动")
+                    .font(.title2.weight(.semibold))
+                Text("设置快捷键，一键打开常用 App")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             Spacer()
+
             Button {
                 model.reloadApps()
             } label: {
                 Image(systemName: "arrow.clockwise")
             }
             .help("刷新 App 列表")
+            .accessibilityLabel("刷新 App 列表")
+
             Button {
                 model.addRow()
             } label: {
                 Image(systemName: "plus")
             }
             .help("新增快捷键配置")
+            .accessibilityLabel("新增快捷键配置")
         }
         .padding(.horizontal)
-        .padding(.vertical, 8)
+        .padding(.vertical, 10)
+        .background(.ultraThinMaterial)
     }
 
     @ViewBuilder
     private var content: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 12) {
             if model.config.rows.isEmpty {
                 ContentUnavailableView(
                     "暂无快捷键配置",
                     systemImage: "keyboard",
                     description: Text("点击右上角加号添加一条快捷键启动规则。")
                 )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.background.secondary, in: RoundedRectangle(cornerRadius: SettingsLayout.cardCornerRadius))
             } else {
-                tableHeader
-                Divider()
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(model.config.rows) { row in
-                            ShortcutRowView(row: row, apps: model.installedApps, model: model)
-                            Divider()
+                VStack(spacing: 0) {
+                    tableHeader
+                    Divider()
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
+                            ForEach(model.config.rows) { row in
+                                ShortcutRowView(row: row, apps: model.installedApps, model: model)
+                                Divider()
+                            }
                         }
                     }
                 }
+                .background(.background.secondary, in: RoundedRectangle(cornerRadius: SettingsLayout.cardCornerRadius))
+                .overlay(
+                    RoundedRectangle(cornerRadius: SettingsLayout.cardCornerRadius)
+                        .stroke(.separator.opacity(0.45))
+                )
             }
+
             if let errorMessage = model.errorMessage {
                 Text(errorMessage)
+                    .font(.caption)
                     .foregroundStyle(.red)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding([.horizontal, .bottom])
             }
         }
     }
 
     private var tableHeader: some View {
-        HStack {
-            Text("快捷键")
-                .frame(width: 220, alignment: .leading)
-            Text("打开的 App")
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Text("操作")
-                .frame(width: 56, alignment: .center)
+        Grid(horizontalSpacing: SettingsLayout.rowHorizontalSpacing, verticalSpacing: 0) {
+            GridRow {
+                Text("快捷键")
+                    .frame(width: SettingsLayout.shortcutColumnWidth, alignment: .leading)
+                    .padding(.leading, 15)
+                Text("打开的 App")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 20)
+                Text("操作")
+                    .frame(width: SettingsLayout.actionColumnWidth, alignment: .center)
+            }
         }
         .font(.caption.weight(.semibold))
         .foregroundStyle(.secondary)
-        .padding(.horizontal)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 }
 
@@ -287,42 +321,62 @@ struct ShortcutRowView: View {
     @Bindable var model: KeyLaunchModel
 
     var body: some View {
-        HStack(spacing: 12) {
-            if let shortcutName = KeyboardShortcuts.Name(rawValue: row.shortcutName) {
-                KeyboardShortcuts.Recorder("", name: shortcutName)
-                    .frame(width: 220, alignment: .leading)
-            } else {
-                Text("快捷键不可用")
-                    .foregroundStyle(.secondary)
-                    .frame(width: 220, alignment: .leading)
-            }
+        Grid(horizontalSpacing: SettingsLayout.rowHorizontalSpacing, verticalSpacing: 0) {
+            GridRow {
+                shortcutRecorder
+                    .frame(width: SettingsLayout.shortcutColumnWidth, alignment: .leading)
 
-            Picker("", selection: Binding(
-                get: { row.app.bundleID },
-                set: { bundleID in
-                    guard let app = apps.first(where: { $0.bundleID == bundleID }) else {
-                        return
-                    }
-                    model.selectApp(app, for: row)
-                }
-            )) {
-                ForEach(apps) { app in
-                    Text(app.displayName).tag(app.bundleID)
-                }
-            }
-            .labelsHidden()
-            .frame(maxWidth: .infinity)
+                appPicker
+                    .frame(maxWidth: .infinity)
 
-            Button(role: .destructive) {
-                model.deleteRow(row)
-            } label: {
-                Image(systemName: "trash")
+                deleteButton
+                    .frame(width: SettingsLayout.actionColumnWidth)
             }
-            .buttonStyle(.borderless)
-            .frame(width: 56)
-            .help("删除")
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 16)
         .padding(.vertical, 10)
+    }
+
+    @ViewBuilder
+    private var shortcutRecorder: some View {
+        if let shortcutName = KeyboardShortcuts.Name(rawValue: row.shortcutName) {
+            KeyboardShortcuts.Recorder("", name: shortcutName)
+                .frame(width: SettingsLayout.shortcutRecorderWidth, alignment: .leading)
+        } else {
+            Text("快捷键不可用")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(width: SettingsLayout.shortcutRecorderWidth, alignment: .leading)
+        }
+    }
+
+    private var appPicker: some View {
+        Picker("", selection: Binding(
+            get: { row.app.bundleID },
+            set: { bundleID in
+                guard let app = apps.first(where: { $0.bundleID == bundleID }) else {
+                    return
+                }
+                model.selectApp(app, for: row)
+            }
+        )) {
+            ForEach(apps) { app in
+                Text(app.displayName).tag(app.bundleID)
+            }
+        }
+        .labelsHidden()
+        .accessibilityLabel("打开的 App")
+    }
+
+    private var deleteButton: some View {
+        Button(role: .destructive) {
+            model.deleteRow(row)
+        } label: {
+            Image(systemName: "trash")
+                .foregroundStyle(.secondary)
+        }
+        .buttonStyle(.borderless)
+        .help("删除")
+        .accessibilityLabel("删除")
     }
 }
