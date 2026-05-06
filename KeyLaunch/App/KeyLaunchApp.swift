@@ -154,11 +154,11 @@ final class KeyLaunchModel {
             return
         }
 
-        NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration()) { [weak self] _, error in
-            Task { @MainActor in
-                self?.errorMessage = error == nil ? nil : "无法打开 App：\(row.app.displayName)。"
-            }
-        }
+        NSWorkspace.shared.openApplication(
+            at: url,
+            configuration: NSWorkspace.OpenConfiguration(),
+            completionHandler: Self.appLaunchCompletionHandler(appDisplayName: row.app.displayName, model: self)
+        )
     }
 
     private func saveConfig(_ newConfig: LaunchConfig) {
@@ -174,6 +174,20 @@ final class KeyLaunchModel {
     private func availableShortcutName() -> KeyboardShortcuts.Name? {
         let usedNames = Set(config.rows.map(\.shortcutName))
         return shortcutNames.first { !usedNames.contains($0.rawValue) }
+    }
+
+    nonisolated private static func appLaunchCompletionHandler(
+        appDisplayName: String,
+        model: KeyLaunchModel
+    ) -> @Sendable (NSRunningApplication?, Error?) -> Void {
+        { [weak model] _, error in
+            let update = AppLaunchCompletion.update(for: error, appDisplayName: appDisplayName)
+            Task { @MainActor in
+                if case .mainActorErrorMessage(let message) = update {
+                    model?.errorMessage = message
+                }
+            }
+        }
     }
 
     private func registerShortcutHandlers() {
