@@ -31,8 +31,35 @@ struct KeyLaunchApp: App {
 
         Window("", id: "settings") {
             SettingsView(model: appModel)
-                .frame(minWidth: 640, minHeight: 420)
+                .frame(width: 640, height: 420)
+                .background(SettingsWindowConfigurator())
         }
+        .windowResizability(.contentSize)
+    }
+}
+
+private struct SettingsWindowConfigurator: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        SettingsWindowConfigurationView()
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {}
+}
+
+private final class SettingsWindowConfigurationView: NSView {
+    private var hasConfiguredWindow = false
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+
+        guard !hasConfiguredWindow, let window else {
+            return
+        }
+
+        hasConfiguredWindow = true
+        window.styleMask.remove(.miniaturizable)
+        // window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        window.standardWindowButton(.miniaturizeButton)?.isEnabled = false
     }
 }
 

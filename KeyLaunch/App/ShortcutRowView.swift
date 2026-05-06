@@ -5,6 +5,7 @@ struct ShortcutRowView: View {
     let row: LaunchRow
     let apps: [InstalledApp]
     @Bindable var model: KeyLaunchModel
+    @State private var isDeleteHovered = false
 
     var body: some View {
         Grid(horizontalSpacing: SettingsLayout.rowHorizontalSpacing, verticalSpacing: 0) {
@@ -59,9 +60,12 @@ struct ShortcutRowView: View {
             model.deleteRow(row)
         } label: {
             Image(systemName: "trash")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(isDeleteHovered ? .red : .secondary)
         }
         .buttonStyle(.borderless)
+        .onHover { isHovered in
+            isDeleteHovered = isHovered
+        }
         .help("删除")
         .accessibilityLabel("删除")
     }
