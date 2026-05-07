@@ -91,10 +91,8 @@ struct SettingsView: View {
             GridRow {
                 Text("快捷键")
                     .frame(width: SettingsLayout.shortcutColumnWidth, alignment: .leading)
-                    .padding(.leading, 15)
                 Text("打开的 App")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 20)
                 Text("操作")
                     .frame(width: SettingsLayout.actionColumnWidth, alignment: .center)
             }

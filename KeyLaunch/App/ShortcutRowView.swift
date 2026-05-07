@@ -14,7 +14,7 @@ struct ShortcutRowView: View {
                     .frame(width: SettingsLayout.shortcutColumnWidth, alignment: .leading)
 
                 appPicker
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 deleteButton
                     .frame(width: SettingsLayout.actionColumnWidth)
