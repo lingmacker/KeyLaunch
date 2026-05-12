@@ -1,5 +1,9 @@
 # KeyLaunch
 
+<p align="center">
+  <img src="icon.png" alt="KeyLaunch App Icon" width="100" />
+</p>
+
 KeyLaunch 是一个 macOS 菜单栏应用，可以为已安装的 App 配置全局快捷键。按下配置好的快捷键后，KeyLaunch 会直接打开对应的 App。
 
 ## 功能
