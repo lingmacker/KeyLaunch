@@ -19,19 +19,20 @@ struct KeyLaunchApp: App {
                 get: { appModel.isLaunchAtLoginEnabled },
                 set: { appModel.setLaunchAtLoginEnabled($0) }
             ))
-            Button("配置") {
+            Button("配置…") {
                 openWindow(id: "settings")
                 NSApp.activate(ignoringOtherApps: true)
             }
+            .keyboardShortcut(",", modifiers: .command)
             Divider()
             Button("退出") {
                 NSApplication.shared.terminate(nil)
             }
         }
 
-        Window("", id: "settings") {
+        Window("KeyLaunch", id: "settings") {
             SettingsView(model: appModel)
-                .frame(width: 640, height: 420)
+                .frame(width: 720, height: 500)
                 .background(SettingsWindowConfigurator())
         }
         .windowResizability(.contentSize)
@@ -46,6 +47,18 @@ private struct SettingsWindowConfigurator: NSViewRepresentable {
     func updateNSView(_ nsView: NSView, context: Context) {}
 }
 
+@MainActor
+enum SettingsWindowPolicy {
+    static func configure(_ window: NSWindow) {
+        window.styleMask.remove(.miniaturizable)
+        window.standardWindowButton(.miniaturizeButton)?.isEnabled = false
+        window.standardWindowButton(.zoomButton)?.isEnabled = false
+
+        NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(nil)
+    }
+}
+
 private final class SettingsWindowConfigurationView: NSView {
     private var hasConfiguredWindow = false
 
@@ -57,9 +70,6 @@ private final class SettingsWindowConfigurationView: NSView {
         }
 
         hasConfiguredWindow = true
-        window.styleMask.remove(.miniaturizable)
-        // window.standardWindowButton(.miniaturizeButton)?.isHidden = true
-        window.standardWindowButton(.miniaturizeButton)?.isEnabled = false
+        SettingsWindowPolicy.configure(window)
     }
 }
-

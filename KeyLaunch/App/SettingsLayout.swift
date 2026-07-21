@@ -19,9 +19,11 @@ let shortcutNames: [KeyboardShortcuts.Name] = [
 ]
 
 enum SettingsLayout {
-    static let shortcutColumnWidth: CGFloat = 168
-    static let shortcutRecorderWidth: CGFloat = 132
-    static let actionColumnWidth: CGFloat = 48
-    static let rowHorizontalSpacing: CGFloat = 18
-    static let cardCornerRadius: CGFloat = 16
+    static let shortcutColumnWidth: CGFloat = 176
+    static let shortcutRecorderWidth: CGFloat = 140
+    static let actionColumnWidth: CGFloat = 36
+    static let rowHorizontalSpacing: CGFloat = 20
+    static let panelCornerRadius: CGFloat = 12
+    static let contentPadding: CGFloat = 20
+    static let rowMinHeight: CGFloat = 52
 }

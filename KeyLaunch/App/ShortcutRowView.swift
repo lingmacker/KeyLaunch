@@ -1,3 +1,4 @@
+import AppKit
 import KeyboardShortcuts
 import SwiftUI
 
@@ -5,7 +6,13 @@ struct ShortcutRowView: View {
     let row: LaunchRow
     let apps: [InstalledApp]
     @Bindable var model: KeyLaunchModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isRowHovered = false
     @State private var isDeleteHovered = false
+
+    private var isSelectedAppAvailable: Bool {
+        apps.contains { $0.bundleID == row.app.bundleID }
+    }
 
     var body: some View {
         Grid(horizontalSpacing: SettingsLayout.rowHorizontalSpacing, verticalSpacing: 0) {
@@ -20,8 +27,17 @@ struct ShortcutRowView: View {
                     .frame(width: SettingsLayout.actionColumnWidth)
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .frame(minHeight: SettingsLayout.rowMinHeight)
+        .padding(.horizontal, 14)
+        .background(isRowHovered ? Color.primary.opacity(0.035) : .clear)
+        .contentShape(Rectangle())
+        .onHover { isHovered in
+            isRowHovered = isHovered
+        }
+        .animation(
+            reduceMotion ? nil : .easeOut(duration: 0.16),
+            value: isRowHovered
+        )
     }
 
     @ViewBuilder
@@ -29,30 +45,53 @@ struct ShortcutRowView: View {
         if let shortcutName = KeyboardShortcuts.Name(rawValue: row.shortcutName) {
             KeyboardShortcuts.Recorder("", name: shortcutName)
                 .frame(width: SettingsLayout.shortcutRecorderWidth, alignment: .leading)
+                .accessibilityLabel("\(row.app.displayName) 的快捷键")
         } else {
-            Text("快捷键不可用")
+            Label("快捷键不可用", systemImage: "exclamationmark.triangle.fill")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.red)
                 .frame(width: SettingsLayout.shortcutRecorderWidth, alignment: .leading)
         }
     }
 
     private var appPicker: some View {
-        Picker("", selection: Binding(
-            get: { row.app.bundleID },
-            set: { bundleID in
-                guard let app = apps.first(where: { $0.bundleID == bundleID }) else {
-                    return
+        HStack(spacing: 10) {
+            Image(nsImage: NSWorkspace.shared.icon(forFile: row.app.path))
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
+                .accessibilityHidden(true)
+
+            Picker("打开的 App", selection: Binding(
+                get: { row.app.bundleID },
+                set: { bundleID in
+                    guard let app = apps.first(where: { $0.bundleID == bundleID }) else {
+                        return
+                    }
+                    model.selectApp(app, for: row)
                 }
-                model.selectApp(app, for: row)
+            )) {
+                if !isSelectedAppAvailable {
+                    Text("\(row.app.displayName)（不可用）")
+                        .tag(row.app.bundleID)
+                }
+
+                ForEach(apps) { app in
+                    Text(app.displayName)
+                        .tag(app.bundleID)
+                }
             }
-        )) {
-            ForEach(apps) { app in
-                Text(app.displayName).tag(app.bundleID)
+            .labelsHidden()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityLabel("打开的 App")
+
+            if !isSelectedAppAvailable {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.orange)
+                    .help("这个 App 当前不可用")
+                    .accessibilityLabel("这个 App 当前不可用")
             }
         }
-        .labelsHidden()
-        .accessibilityLabel("打开的 App")
     }
 
     private var deleteButton: some View {
@@ -61,12 +100,22 @@ struct ShortcutRowView: View {
         } label: {
             Image(systemName: "trash")
                 .foregroundStyle(isDeleteHovered ? .red : .secondary)
+                .frame(width: 28, height: 28)
+                .background(
+                    isDeleteHovered ? Color.red.opacity(0.1) : .clear,
+                    in: RoundedRectangle(cornerRadius: 7)
+                )
+                .contentShape(Rectangle())
         }
-        .buttonStyle(.borderless)
+        .buttonStyle(.plain)
         .onHover { isHovered in
             isDeleteHovered = isHovered
         }
-        .help("删除")
-        .accessibilityLabel("删除")
+        .animation(
+            reduceMotion ? nil : .easeOut(duration: 0.16),
+            value: isDeleteHovered
+        )
+        .help("删除 \(row.app.displayName) 的快捷键")
+        .accessibilityLabel("删除 \(row.app.displayName) 的快捷键")
     }
 }

@@ -14,6 +14,7 @@ final class KeyLaunchModel {
     var installedApps: [InstalledApp]
     var isLaunchAtLoginEnabled: Bool
     var errorMessage: String?
+    var isReloading = false
 
     init() {
         let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
@@ -36,7 +37,28 @@ final class KeyLaunchModel {
     }
 
     func reloadApps() {
-        installedApps = appDiscoverer.installedApps()
+        guard !isReloading else {
+            return
+        }
+
+        isReloading = true
+        let appDiscoverer = appDiscoverer
+
+        Task {
+            let discoveredApps = await Task.detached(priority: .userInitiated) {
+                appDiscoverer.installedApps()
+            }.value
+
+            installedApps = discoveredApps
+            isReloading = false
+
+            if discoveredApps.isEmpty {
+                errorMessage = "没有找到可打开的 App。"
+            }
+        }
+    }
+    func dismissError() {
+        errorMessage = nil
     }
 
     func addRow() {
